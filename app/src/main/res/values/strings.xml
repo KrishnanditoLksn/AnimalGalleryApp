@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">GalleryApp</string>
-    <string name=""></string>
+    <string name="squirrel">Squirrel</string>
+    <string name = "sciuridae">Sciuridae</string>
+    <string name ="lovebird">Lovebird</string>
+    <string name ="agarponis">Agarponis</string>
+    <string name ="tiger">Tiger</string>
+    <string name ="panthera">Panthera Tigris</string>
+    <string name="b_prev">Previous</string>
+    <string name="b_next">Next</string>
 </resources>
