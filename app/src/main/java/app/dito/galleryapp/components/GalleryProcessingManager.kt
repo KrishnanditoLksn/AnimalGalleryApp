@@ -1,16 +1,16 @@
 package app.dito.galleryapp.components
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.dito.galleryapp.R
+import app.dito.galleryapp.data.ImageDatas
 
 @Composable
 fun GalleryAppMain(modifier: Modifier = Modifier) {
@@ -33,27 +34,28 @@ fun GalleryAppMain(modifier: Modifier = Modifier) {
         mutableIntStateOf(1)
     }
 
-    val imageRes: Int = when (imageId) {
-        1 -> gallerySwitcher(
-            image = R.drawable.pexels_pixabay_47547,
-            animalName = R.string.squirrel,
-            animalScientificName = R.string.sciuridae,
-        )
+    val imageRes: ImageDatas = when (imageId) {
+        1 ->
+            ImageDatas(
+                image = R.drawable.pexels_pixabay_47547,
+                animalName = R.string.squirrel,
+                animalScientificName = R.string.sciuridae,
+            )
 
-        2 -> gallerySwitcher(
+        2 -> ImageDatas(
             image = R.drawable.pexels_roshan_kamath_1661179,
             animalName = R.string.lovebird,
             animalScientificName = R.string.agarponis
         )
 
-        3 -> gallerySwitcher(
+        3 -> ImageDatas(
             image = R.drawable.pexels_pixabay_162203,
             animalName = R.string.tiger,
             animalScientificName = R.string.panthera
         )
 
         else -> {
-            R.drawable.pexels_pixabay_162203
+            throw IllegalStateException("Fragment $imageId is not correct")
         }
     }
 
@@ -61,17 +63,41 @@ fun GalleryAppMain(modifier: Modifier = Modifier) {
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-
+        verticalArrangement = Arrangement.Center,
+        modifier = modifier.verticalScroll(rememberScrollState())
+    )
+    {
         Image(
-            painter = painterResource(id = imageRes),
-            contentDescription = imageId.toString()
+            painter = painterResource(id = imageRes.image),
+            contentDescription = imageId.toString(),
+            modifier.padding(20.dp)
         )
         Spacer(modifier.height(20.dp))
 
+        Surface(
+            color = Color.Gray,
+            shadowElevation = 20.dp
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = stringResource(id = imageRes.animalName),
+                    fontSize = 20.sp
+                )
+                Spacer(modifier.height(15.dp))
+
+                Text(
+                    text = stringResource(id = imageRes.animalScientificName),
+                    fontSize = 20.sp
+                )
+            }
+        }
+        Spacer(modifier.height(30.dp))
+
         Row(
-            horizontalArrangement = Arrangement.SpaceAround,
+            horizontalArrangement = Arrangement.spacedBy(20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Button(onClick = {
@@ -100,39 +126,4 @@ fun GalleryAppMain(modifier: Modifier = Modifier) {
             }
         }
     }
-
-}
-
-@Composable
-fun gallerySwitcher(
-    @DrawableRes image: Int,
-    @StringRes animalName: Int,
-    @StringRes animalScientificName: Int,
-    modifier: Modifier = Modifier
-): Int {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Image(
-            modifier = modifier.border(
-                BorderStroke(4.dp, Color.Black)
-            ),
-            painter = painterResource(image),
-            contentDescription = null,
-        )
-
-        Column {
-            Text(
-                text = stringResource(id = animalName),
-                fontSize = 20.sp
-            )
-            Spacer(modifier.height(10.dp))
-            Text(
-                text = stringResource(id = animalScientificName),
-                fontSize = 20.sp
-            )
-        }
-    }
-    return image
 }
